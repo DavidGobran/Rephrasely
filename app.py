@@ -2,13 +2,12 @@ import streamlit as st
 from huggingface_hub import InferenceClient
 import torch
 from transformers import pipeline
+import re
 
 # Inference client setup
 client = InferenceClient("HuggingFaceH4/zephyr-7b-beta")
 pipe = pipeline("text-generation", "microsoft/Phi-3-mini-4k-instruct", torch_dtype=torch.bfloat16, device_map="auto")
 
-x = st.slider('Select a value')
-st.write(x, 'squared is', x * x)
 # Global flag to handle cancellation
 stop_inference = False
 
@@ -88,3 +87,52 @@ def cancel_inference():
     global stop_inference
     stop_inference = True
 
+
+def main():
+    st.markdown('''<h3>Paraphraser</h3>''', unsafe_allow_html=True)
+    # input_type = st.radio('Paste the text', 
+    #                   horizontal=True)
+
+    n_sents = st.slider('Select the number of sentences to process', 5, 30, 10)
+
+    scrape_error = None
+    paraphrase_error = None
+    paraphrased_txt = None
+    input_txt = None
+    input_txt = st.text_area("Enter the text. (Ensure the text is grammatically correct and has punctuations at the right places):", "", height=150)
+
+    if (st.button("Submit")) or (input_txt):
+        with st.status("Processing...", expanded=True) as status:
+            input_txt = re.sub(r'\n+',' ', input_txt)
+
+            # Paraphrasing start
+            
+            try:
+                st.info("Rewriting the text. This takes time.", icon="ℹ️")
+                # input_txt, paraphrased_txt = inference_long_text(input_txt, n_sents)
+                
+            except Exception as e:
+                paraphrased_txt = None
+                paraphrase_error = str(e)
+            if paraphrased_txt is not None:
+                st.success("Successfully rewrote the text.", icon="✅")
+            else:
+                st.error("Encountered an error while rewriting the text.", icon="🚨")
+
+            # Paraphrasing end
+
+            if paraphrase_error is None:
+                status.update(label="Done", state="complete", expanded=False)
+            else:
+                status.update(label="Error", state="error", expanded=False)
+
+        if paraphrase_error is not None:
+            st.error(f"Paraphrasing Error:  \n{paraphrase_error}", icon="🚨")
+        else:
+            result = [f"<b>Scraped Sentence:</b> {scraped}<br><b>Rewritten Sentence:</b> {paraphrased}" for scraped, paraphrased in zip(input_txt, paraphrased_txt)]
+            result = "<br><br>".join(result)
+            result = result.replace("$", "&#36;")
+            st.markdown(f"{result}", unsafe_allow_html=True)
+
+if __name__ == "__main__":
+    main()
