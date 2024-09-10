@@ -171,6 +171,7 @@ def main():
             if paraphrased_txt is not None:
                 st.success("Successfully rewrote the text.", icon="✅")
                 st.text_area("Paraphrased Text:", paraphrased_txt, height=150)  # Display the paraphrased output
+                print(paraphrased_txt)
             else:
                 st.error(f"Encountered an error: {paraphrase_error}", icon="🚨")
 
