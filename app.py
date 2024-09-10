@@ -135,10 +135,7 @@ def main():
         if paraphrase_error is not None:
             st.error(f"Paraphrasing Error:  \n{paraphrase_error}", icon="🚨")
         else:
-            result = [f"<b>Scraped Sentence:</b> {scraped}<br><b>Rewritten Sentence:</b> {paraphrased}" for scraped, paraphrased in zip(input_txt, paraphrased_txt)]
-            result = "<br><br>".join(result)
-            result = result.replace("$", "&#36;")
-            st.markdown(f"{result}", unsafe_allow_html=True)
+            st.text_area("Paraphrased Text:", paraphrased_txt, height=150)
 
 if __name__ == "__main__":
     main()
