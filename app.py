@@ -168,7 +168,6 @@ def main():
                 paraphrase_error = str(e)
             
             # Paraphrasing end
-
             if paraphrased_txt is not None:
                 st.success("Successfully rewrote the text.", icon="✅")
                 st.text_area("Paraphrased Text:", paraphrased_txt, height=150)  # Display the paraphrased output
@@ -183,6 +182,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
