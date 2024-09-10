@@ -90,52 +90,99 @@ def cancel_inference():
     stop_inference = True
 
 
+# def main():
+#     st.markdown('''<h3>Paraphraser</h3>''', unsafe_allow_html=True)
+#     # input_type = st.radio('Paste the text', 
+#     #                   horizontal=True)
+
+#     n_sents = st.slider('Select the number of sentences to process', 5, 30, 10)
+#     temperature = st.slider('Enter the temperature', 0.0, 1.0, 0.1)
+#     sys_message = st.text_area("Modify the system message if you want:", "You are a friendly Chatbot who paraphrases text.", height=10)
+#     local_model = st.checkbox("Use local model", value=False)
+
+#     scrape_error = None
+#     paraphrase_error = None
+#     paraphrased_txt = None
+#     input_txt = None
+#     input_txt = st.text_area("Enter the text. (Ensure the text is grammatically correct and has punctuations at the right places):", "", height=150)
+
+#     if (st.button("Submit")) or (input_txt):
+#         with st.status("Processing...", expanded=True) as status:
+#             input_txt = re.sub(r'\n+',' ', input_txt)
+
+#             # Paraphrasing start
+            
+#             try:
+#                 st.info("Rewriting the text. This takes time.", icon="ℹ️")
+#                 # input_txt, paraphrased_txt = inference_long_text(input_txt, n_sents)
+#                 paraphrased_txt = "".join([resp for resp in respond(input_txt, system_message=sys_message, temperature=temperature, use_local_model=local_model)])
+                
+#             except Exception as e:
+#                 paraphrased_txt = None
+#                 paraphrase_error = str(e)
+#             if paraphrased_txt is not None:
+#                 st.success("Successfully rewrote the text.", icon="✅")
+#             else:
+#                 st.error("Encountered an error while rewriting the text.", icon="🚨")
+
+#             # Paraphrasing end
+
+#             if paraphrase_error is None:
+#                 status.update(label="Done", state="complete", expanded=False)
+#             else:
+#                 status.update(label="Error", state="error", expanded=False)
+
+#         if paraphrase_error is not None:
+#             st.error(f"Paraphrasing Error:  \n{paraphrase_error}", icon="🚨")
+#         else:
+#             st.text_area("Paraphrased Text:", paraphrased_txt, height=150)
+
 def main():
     st.markdown('''<h3>Paraphraser</h3>''', unsafe_allow_html=True)
-    # input_type = st.radio('Paste the text', 
-    #                   horizontal=True)
 
+    # Number of sentences and temperature sliders
     n_sents = st.slider('Select the number of sentences to process', 5, 30, 10)
-    temperature = st.slider('Enter the temperature', 0.0, 1.0, 0.1)
+    temperature = st.slider('Enter the temperature', 0.0, 1.0, 0.7)  # Adjusted default temperature to 0.7
     sys_message = st.text_area("Modify the system message if you want:", "You are a friendly Chatbot who paraphrases text.", height=10)
     local_model = st.checkbox("Use local model", value=False)
 
-    scrape_error = None
-    paraphrase_error = None
-    paraphrased_txt = None
-    input_txt = None
     input_txt = st.text_area("Enter the text. (Ensure the text is grammatically correct and has punctuations at the right places):", "", height=150)
 
-    if (st.button("Submit")) or (input_txt):
+    if st.button("Submit") and input_txt:
         with st.status("Processing...", expanded=True) as status:
-            input_txt = re.sub(r'\n+',' ', input_txt)
+            input_txt = re.sub(r'\n+', ' ', input_txt)
+
+            paraphrased_txt = ""
+            paraphrase_error = None
 
             # Paraphrasing start
-            
             try:
                 st.info("Rewriting the text. This takes time.", icon="ℹ️")
-                # input_txt, paraphrased_txt = inference_long_text(input_txt, n_sents)
-                paraphrased_txt = "".join([resp for resp in respond(input_txt, system_message=sys_message, temperature=temperature, use_local_model=local_model)])
-                
+
+                # Iterate over the generator to collect responses
+                for resp in respond(input_txt, system_message=sys_message, temperature=temperature, use_local_model=local_model):
+                    paraphrased_txt += resp  # Accumulate the generated tokens
+
             except Exception as e:
                 paraphrased_txt = None
                 paraphrase_error = str(e)
+            
+            # Paraphrasing end
+
             if paraphrased_txt is not None:
                 st.success("Successfully rewrote the text.", icon="✅")
+                st.text_area("Paraphrased Text:", paraphrased_txt, height=150)  # Display the paraphrased output
             else:
-                st.error("Encountered an error while rewriting the text.", icon="🚨")
-
-            # Paraphrasing end
+                st.error(f"Encountered an error: {paraphrase_error}", icon="🚨")
 
             if paraphrase_error is None:
                 status.update(label="Done", state="complete", expanded=False)
             else:
                 status.update(label="Error", state="error", expanded=False)
 
-        if paraphrase_error is not None:
-            st.error(f"Paraphrasing Error:  \n{paraphrase_error}", icon="🚨")
-        else:
-            st.text_area("Paraphrased Text:", paraphrased_txt, height=150)
 
 if __name__ == "__main__":
     main()
+
+
+
