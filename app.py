@@ -88,5 +88,3 @@ def cancel_inference():
     global stop_inference
     stop_inference = True
 
-if __name__ == "__main__":
-    demo.launch(share=False)  # Remove share=True because it's not supported on HF Spaces
