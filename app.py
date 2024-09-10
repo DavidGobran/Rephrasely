@@ -51,7 +51,7 @@ def respond(
                 return
             token = output['generated_text'][-1]['content']
             response += token
-            return response
+        return response
             # yield [(message, response)]  # Yield history + new response
 
     else:
@@ -82,7 +82,7 @@ def respond(
             token = message_chunk.choices[0].delta.content
             response += token
             # yield [(message, response)]  # Yield history + new response
-            return response
+        return response
 
 
 def cancel_inference():
@@ -115,7 +115,7 @@ def main():
             try:
                 st.info("Rewriting the text. This takes time.", icon="ℹ️")
                 # input_txt, paraphrased_txt = inference_long_text(input_txt, n_sents)
-                paraphrased_txt = respond(input_txt, system_message=sys_message, temperature=temperature, use_local_model=local_model)
+                paraphrased_txt = "".join([resp for resp in respond(input_txt, system_message=sys_message, temperature=temperature, use_local_model=local_model)])
                 
             except Exception as e:
                 paraphrased_txt = None
