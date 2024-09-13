@@ -72,6 +72,25 @@ def cancel_inference():
 # This was written by ChatGPT with the prompt "Create a Streamlit interface for a text paraphraser."
 def main():
     st.markdown('''<h3 style="text-align:center;">Text Paraphraser</h3>''', unsafe_allow_html=True)
+    system_message = st.text_input("System message", "You are a bot that paraphrases text.")
+    
+    # Style for centering elements
+    st.markdown(
+        """
+        <style>
+        .center-checkbox {
+            display: flex;
+            justify-content: center;
+        }
+        .center-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
     st.markdown('<div class="center-checkbox">', unsafe_allow_html=True)
     use_local_model = st.checkbox("Use local model", value=False)
@@ -85,6 +104,7 @@ def main():
 
     paraphrased_txt = None
 
+    st.markdown('<div class="center-buttons">', unsafe_allow_html=True)
     if st.button("Submit"):
         input_txt = re.sub(r'\n+', ' ', input_txt)  # Clean the input text
         
@@ -101,6 +121,7 @@ def main():
             st.success(f"Text successfully paraphrased in {elapsed_time:.2f} seconds!")
         else:
             st.error("Failed to paraphrase the text.")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if paraphrased_txt:
         st.text_area("Paraphrased Text:", paraphrased_txt, height=150)
