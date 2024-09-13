@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from app import respond
+from inference import respond
 
 class TestRespondFunction(unittest.TestCase):
     # GitHub Copilot generated this test case
