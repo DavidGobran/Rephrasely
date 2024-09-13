@@ -73,9 +73,9 @@ def cancel_inference():
 def main():
     st.markdown('''<h3 style="text-align:center;">Text Paraphraser</h3>''', unsafe_allow_html=True)
 
-    system_message = st.text_input("System message", "You are a bot that paraphrases text.")
+    st.markdown('<div class="center-checkbox">', unsafe_allow_html=True)
     use_local_model = st.checkbox("Use local model", value=False)
-    st.write("<center>", use_local_model, "</center>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     max_tokens = st.slider('Max new tokens', 1, 2048, 512)
     temperature = st.slider('Temperature', 0.1, 1.0, 0.7)
