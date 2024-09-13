@@ -15,7 +15,7 @@ stop_inference = False
 # This was adapted from Professor's sample code with modifications for compatibility with Streamlit 
 def respond(
     message,
-    system_message="You are a friendly Chatbot who paraphrases text.",
+    system_message="You are a bot that paraphrases text.",
     max_tokens=512,
     temperature=0.7,
     top_p=0.95,
@@ -71,10 +71,11 @@ def cancel_inference():
 
 # This was written by ChatGPT with the prompt "Create a Streamlit interface for a text paraphraser."
 def main():
-    st.markdown('''<h3>Paraphraser</h3>''', unsafe_allow_html=True)
+    st.markdown('''<h3 style="text-align:center;">Text Paraphraser</h3>''', unsafe_allow_html=True)
 
-    system_message = st.text_area("System message", "You are a friendly Chatbot who paraphrases text.")
+    system_message = st.text_input("System message", "You are a bot that paraphrases text.")
     use_local_model = st.checkbox("Use local model", value=False)
+    st.write("<center>", use_local_model, "</center>", unsafe_allow_html=True)
 
     max_tokens = st.slider('Max new tokens', 1, 2048, 512)
     temperature = st.slider('Temperature', 0.1, 1.0, 0.7)
@@ -90,7 +91,7 @@ def main():
         start_time = time.time()  # Start the stopwatch
         
         with st.spinner("Processing..."):
-            if st.button("Cancel Inference"):
+            if st.button("Cancel"):
                 cancel_inference()
             paraphrased_txt = respond(input_txt, system_message=system_message, max_tokens=max_tokens, temperature=temperature, top_p=top_p, use_local_model=use_local_model)
         
