@@ -9,6 +9,7 @@ pipe = pipeline("text-generation", "microsoft/Phi-3-mini-4k-instruct", torch_dty
 # Global flag to handle cancellation
 stop_inference = False
 
+# This was adapted from Yang's code and modified to not keep track of history and made compatible with Streamlit
 def respond(
     message,
     system_message="You are a bot that paraphrases text.",
