@@ -5,7 +5,7 @@ from inference import respond, cancel_inference
 
 # This was written by ChatGPT with the prompt "Create a Streamlit interface for a text paraphraser."
 def main():
-    st.markdown('''<h3 style="text-align:center;">Text Paraphraser</h3>''', unsafe_allow_html=True)
+    st.markdown('''<h3 style="text-align:center;">Rephrasely</h3>''', unsafe_allow_html=True)
     system_message = st.text_input("System message", "You are a bot that paraphrases text.")
 
     use_local_model = st.checkbox("Use local model", value=False)
