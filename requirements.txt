@@ -1,5 +1,7 @@
+torch==2.3.0+cpu
+
+streamlit==1.39.*
 huggingface_hub==0.23.*
-torch==2.4.*
 transformers==4.43.*
 accelerate==0.33.*
 protobuf==3.20.*
